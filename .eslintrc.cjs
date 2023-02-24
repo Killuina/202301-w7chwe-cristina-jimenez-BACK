@@ -6,6 +6,10 @@ module.exports = {
   extends: ["xo", "prettier"],
   overrides: [
     {
+      rules: {
+        "new-cap": ["error", { capIsNewExceptions: ["Router"] }],
+        "no-implicit-coercion": "off",
+      },
       extends: ["xo-typescript", "prettier"],
       files: ["*.ts", "*.tsx"],
     },

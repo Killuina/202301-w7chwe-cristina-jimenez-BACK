@@ -1,8 +1,8 @@
 import createDebug from "debug";
-import { app } from ".";
 import { type CustomError } from "../customError/customError.js";
+import { app } from "./index.js";
 
-const debug = createDebug("robots:");
+const debug = createDebug("feisbuk:");
 
 const startServer = async (port: number) =>
   new Promise((resolve, reject) => {
