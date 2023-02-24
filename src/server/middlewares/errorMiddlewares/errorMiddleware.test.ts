@@ -1,6 +1,6 @@
 import { type Request, type NextFunction, type Response } from "express";
 import { CustomError } from "../../../customError/customError";
-import { generalError } from "./errorMiddlewares.js";
+import { generalError, notFoundError } from "./errorMiddlewares.js";
 
 describe("Given a generalError middleware", () => {
   describe("When it receives a response and an error with status 500", () => {
@@ -32,6 +32,23 @@ describe("Given a generalError middleware", () => {
       generalError(error, req, res as Response, next);
 
       expect(res.json).toHaveBeenCalledWith({ error: error.publicMessage });
+    });
+  });
+});
+
+describe("Given the notFoundError middlware", () => {
+  describe("When it receives a request", () => {
+    test("Then it should call the received next function", () => {
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const req = {} as Request;
+      const next = jest.fn();
+
+      notFoundError(req, res as Response, next);
+
+      expect(next).toBeCalled();
     });
   });
 });
