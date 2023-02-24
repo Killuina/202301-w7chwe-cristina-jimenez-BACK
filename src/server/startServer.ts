@@ -9,3 +9,5 @@ const startServer = async (port: number) =>
       resolve(server);
     });
   });
+
+export default startServer;
