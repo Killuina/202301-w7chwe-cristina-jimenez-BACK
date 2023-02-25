@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 import connectDatabase from "../../database/connectDatabase";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import request from "supertest";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import { app } from "..";
 import { type UserStructure } from "../types";
+import User from "../../database/models/User";
 
 let server: MongoMemoryServer;
 
@@ -15,6 +18,49 @@ beforeAll(async () => {
 afterAll(async () => {
   await server.stop();
   await mongoose.connection.close();
+});
+describe("Given the POST /users/login endpoint", () => {
+  const userData = {
+    username: "notDiana",
+    password: "12345678",
+    email: "not@diana.com",
+  };
+  beforeAll(async () => {
+    await User.create(userData);
+  });
+
+  describe("When it receives a request with a user with username 'notDiana' and password '12345678' and the user exists", () => {
+    test("Then it should respond with status 200 and property token with value 'mocken'", async () => {
+      const expectedStatus = 200;
+      const expectedToken = "mocken";
+      const path = "/users/login";
+      bcrypt.compare = jest.fn().mockResolvedValue(true);
+      jwt.sign = jest.fn().mockReturnValue(expectedToken);
+
+      const response = await request(app)
+        .post(path)
+        .send(userData)
+        .expect(expectedStatus);
+
+      expect(response.body).toHaveProperty("token", expectedToken);
+    });
+  });
+  describe("When it receives a request with a user with username 'notDiana' and password '12345678' and the user doesn't exists", () => {
+    test("Then it should respond with status 401 and error: 'Wrong Credentials'", async () => {
+      const expectedStatus = 401;
+      const expectedMessage = "Wrong credentials";
+      const path = "/users/login";
+
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
+
+      const response = await request(app)
+        .post(path)
+        .send(userData)
+        .expect(expectedStatus);
+
+      expect(response.body).toHaveProperty("error", expectedMessage);
+    });
+  });
 });
 
 describe("Given the POST /users/register endpoint", () => {
