@@ -1,5 +1,5 @@
 import { type Request, type NextFunction, type Response } from "express";
-import { CustomError } from "../../../customError/customError";
+import { CustomError } from "../../../CustomError/CustomError";
 import { generalError, notFoundError } from "./errorMiddlewares.js";
 
 describe("Given a generalError middleware", () => {
