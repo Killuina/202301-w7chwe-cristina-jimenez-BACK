@@ -35,9 +35,13 @@ export const loginUser = async (
     }
 
     if (!(await bcrypt.compare(password, user.password))) {
-      const error = new CustomError("Wrong password", 401, "Wrong credentials");
+      const userError = new CustomError(
+        "Wrong password",
+        401,
+        "Wrong credentials"
+      );
 
-      next(error);
+      next(userError);
 
       return;
     }
