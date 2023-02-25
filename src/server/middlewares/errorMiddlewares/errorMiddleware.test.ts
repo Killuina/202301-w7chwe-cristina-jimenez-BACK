@@ -1,6 +1,6 @@
 import { type Request, type NextFunction, type Response } from "express";
 import { CustomError } from "../../../CustomError/CustomError";
-import { generalError, notFoundError } from "./errorMiddlewares.js";
+import { generalError, notFoundError } from "./errorMiddlewares";
 
 describe("Given a generalError middleware", () => {
   describe("When it receives a response and an error with status 500", () => {

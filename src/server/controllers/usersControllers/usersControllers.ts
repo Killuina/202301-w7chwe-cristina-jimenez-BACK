@@ -1,8 +1,8 @@
 import { type NextFunction, type Request, type Response } from "express";
 import bcrypt from "bcrypt";
-import User from "../../../database/models/User";
+import User from "../../../database/models/User.js";
 import { type UserStructure } from "../../types";
-import { CustomError } from "../../../CustomError/CustomError";
+import { CustomError } from "../../../CustomError/CustomError.js";
 
 const saltLength = 10;
 
@@ -11,12 +11,12 @@ export const registerUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { password, username, email } = req.body;
-
   try {
+    const { password, username, email } = req.body;
+
     const avatar = req.file!.originalname;
 
-    const hashedPassword = bcrypt.hash(password, saltLength);
+    const hashedPassword = await bcrypt.hash(password, saltLength);
 
     await User.create({ avatar, password: hashedPassword, username, email });
 
