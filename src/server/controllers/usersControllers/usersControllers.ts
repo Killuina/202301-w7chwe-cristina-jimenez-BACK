@@ -19,7 +19,6 @@ export const loginUser = async (
 ) => {
   try {
     const { password, username } = req.body;
-
     const user = await User.findOne({ username }).exec();
 
     if (!user) {
