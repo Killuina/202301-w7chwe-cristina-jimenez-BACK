@@ -1,8 +1,6 @@
 import { type Request, type Response } from "express";
 import pong from "./pong";
 
-beforeEach(() => jest.restoreAllMocks());
-
 describe("Given the pong controller", () => {
   describe("When it receives a response", () => {
     test("Then it should call its status method with 200", () => {

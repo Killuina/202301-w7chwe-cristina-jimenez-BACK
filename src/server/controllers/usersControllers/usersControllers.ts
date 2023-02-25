@@ -1,10 +1,64 @@
 import { type NextFunction, type Request, type Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import User from "../../../database/models/User.js";
-import { type UserStructure } from "../../types";
+import { type UserLoginCredentials, type UserStructure } from "../../types";
 import { CustomError } from "../../../CustomError/CustomError.js";
+import { type CustomJwtPayload } from "../types.js";
 
 const saltLength = 10;
+
+export const loginUser = async (
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    UserLoginCredentials
+  >,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { password, username } = req.body;
+
+    const user = await User.findOne({ username }).exec();
+
+    if (!user) {
+      const userError = new CustomError(
+        "Wrong username",
+        401,
+        "Wrong credentials"
+      );
+
+      next(userError);
+
+      return;
+    }
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      const userError = new CustomError(
+        "Wrong password",
+        401,
+        "Wrong credentials"
+      );
+
+      next(userError);
+
+      return;
+    }
+
+    const jwtPayload: CustomJwtPayload = {
+      sub: user?._id.toString(),
+    };
+
+    const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!, {
+      expiresIn: "2d",
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    next((error as Error).message);
+  }
+};
 
 export const registerUser = async (
   req: Request<Record<string, unknown>, Record<string, unknown>, UserStructure>,

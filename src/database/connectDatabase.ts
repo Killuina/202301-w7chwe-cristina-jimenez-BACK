@@ -8,6 +8,7 @@ const connectDatabase = async (url: string) => {
     virtuals: true,
     transform(doc, returnedObject) {
       delete returnedObject._id;
+      delete returnedObject.__v;
     },
   });
 
