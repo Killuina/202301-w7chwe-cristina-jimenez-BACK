@@ -15,7 +15,7 @@ app.disable("x-powered-by");
 const corsOptions = {
   origin: [
     "https://202301-w7chwe-cristina-jimenez.netlify.app/",
-    "http://localhost:300st:3000",
+    "http://localhost:3000",
   ],
 };
 
