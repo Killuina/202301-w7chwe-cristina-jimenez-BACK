@@ -1,5 +1,5 @@
 import { type Response, type NextFunction, type Request } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../../database/models/User";
 import { type UserLoginCredentials, type UserStructure } from "../../types";
@@ -159,14 +159,15 @@ describe("Given the createUser controller", () => {
       };
       const next: NextFunction = () => ({});
       User.create = jest.fn();
-
-      await registerUser(req, res as Response, next);
-
-      expect(res.json).toBeCalledWith({
+      const expectedResponseObject = {
         message: `User '${user.username}' with email ${user.email} created!`,
         username: user.username,
         email: user.email,
-      });
+      };
+
+      await registerUser(req, res as Response, next);
+
+      expect(res.json).toBeCalledWith(expectedResponseObject);
     });
   });
 });

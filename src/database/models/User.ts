@@ -15,8 +15,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  friends: Schema.Types.ObjectId,
-  enemies: Schema.Types.ObjectId,
   avatar: String,
 });
 

@@ -3,7 +3,7 @@ import connectDatabase from "../../database/connectDatabase";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import request from "supertest";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { app } from "..";
 import { type UserStructure } from "../types";
 import User from "../../database/models/User";
