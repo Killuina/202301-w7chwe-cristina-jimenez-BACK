@@ -12,7 +12,14 @@ export const app = express();
 
 app.disable("x-powered-by");
 
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "https://202301-w7chwe-cristina-jimenez.netlify.app/",
+    "http://localhost:300st:3000",
+  ],
+};
+
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(express.json());
 
